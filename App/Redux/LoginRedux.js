@@ -4,10 +4,10 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  loginRequest: ['username', 'password'],
-  loginSuccess: ['username'],
-  loginFailure: ['error'],
-  logout: null
+  addPosition: ['latitude', 'longitude'],
+  loginRequest: ['email', 'latitude', 'longitude'],
+  loginSuccess: ['userData'],
+  loginFailure: null,
 })
 
 export const LoginTypes = Types
@@ -16,37 +16,42 @@ export default Creators
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  username: null,
+  email: null,
+  fetching: null,
+  userId: null,
+  token: null,
   error: null,
-  fetching: false
+  latitude: '',
+  longitude: ''
 })
 
 /* ------------- Reducers ------------- */
 
-// we're attempting to login
-export const request = (state) => state.merge({ fetching: true })
+export const addPosition = (state, { latitude, longitude }) =>
+  state.merge({ latitude, longitude })
 
-// we've successfully logged in
-export const success = (state, { username }) =>
-  state.merge({ fetching: false, error: null, username })
+// request the data from an api
+export const request = (state, { email, latitude, longitude }) =>
+  state.merge({ fetching: true, email })
 
-// we've had a problem logging in
-export const failure = (state, { error }) =>
-  state.merge({ fetching: false, error })
+// successful api lookup
+export const success = (state, action) => {
+  const { user, token } = action.userData
+  const userId = user.id
+  const email = user.email
+  return state.merge({ fetching: false, error: null, userId, token })
+}
 
-// we've logged out
-export const logout = (state) => INITIAL_STATE
+// Something went wrong somewhere.
+export const failure = state =>
+  state.merge({ fetching: false, error: true, userId: null, token: null })
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
+  [Types.ADD_POSITION]: addPosition,
   [Types.LOGIN_REQUEST]: request,
   [Types.LOGIN_SUCCESS]: success,
   [Types.LOGIN_FAILURE]: failure,
-  [Types.LOGOUT]: logout
 })
 
-/* ------------- Selectors ------------- */
-
-// Is the current user logged in?
-export const isLoggedIn = (loginState) => loginState.username !== null

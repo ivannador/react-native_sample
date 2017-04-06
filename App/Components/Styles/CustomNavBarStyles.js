@@ -1,27 +1,40 @@
-import { Colors, Metrics } from '../../Themes/'
+import { Colors, Metrics, Fonts } from '../../Themes/'
+import { Platform } from 'react-native'
 
 export default {
-  container: {
+  mainContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
+  },
+  container: {
     height: Metrics.navBarHeight,
     paddingHorizontal: Metrics.baseMargin,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.drawer,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  leftButton: {
-    paddingTop: Metrics.baseMargin
+  title: {
+    textAlign: 'center',
+    color: Colors.snow,
+    backgroundColor: Colors.transparent,
+    fontSize: 15,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    ...Platform.select({
+      ios: {
+        marginTop: 13,
+      },
+      android: {
+        marginTop: 6,
+      },
+    }),
   },
   logo: {
     height: Metrics.navBarHeight - Metrics.doubleBaseMargin,
     width: Metrics.navBarHeight - Metrics.doubleBaseMargin,
     resizeMode: 'contain'
   },
-  rightButton: {
-    paddingTop: Metrics.baseMargin
-  }
 }

@@ -1,52 +1,82 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes'
+// @flow
+
+import {StyleSheet, Platform} from 'react-native'
+import {ApplicationStyles, Colors, Metrics, Fonts} from '../../Themes/'
 
 export default StyleSheet.create({
-  container: {
-    paddingTop: 70,
-    backgroundColor: Colors.background
+  ...ApplicationStyles.screen,
+  socialLoginSection: {
+    flex: 1,
+    marginHorizontal: Metrics.section,
+    padding: Metrics.baseMargin,
+    borderTopColor: Colors.coal,
+    borderTopWidth: 0.5,
   },
-  form: {
-    backgroundColor: Colors.snow,
-    margin: Metrics.baseMargin,
-    borderRadius: 4
+  socialLoginSectionText: {
+    color: Colors.themeDark,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: Fonts.size.regular,
+    marginBottom: Metrics.doubleBaseMargin
   },
-  row: {
-    paddingVertical: Metrics.doubleBaseMargin,
+  whitebox: {
+    // ios has a floating status bar
+    ...Platform.select({
+      ios: {
+        paddingTop: Metrics.baseMargin + Metrics.doubleBaseMargin,
+        paddingBottom: Metrics.baseMargin
+      },
+      android: {
+        paddingVertical: Metrics.baseMargin,
+      },
+    }),
+    height: Metrics.navBarHeight,
+    backgroundColor: Colors.snow
+  },
+  keyboardAvoidingContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: Metrics.doubleBaseMargin
   },
-  rowLabel: {
-    color: Colors.charcoal
+  facebookButton: {
+    backgroundColor: Colors.facebook,
+    marginTop: Metrics.baseMargin
   },
-  textInput: {
-    height: 40,
-    color: Colors.coal
+  googleButton: {
+    backgroundColor: Colors.google,
   },
-  textInputReadonly: {
-    height: 40,
-    color: Colors.steel
+  textInputTitleText: {
+    color: Colors.themeDark,
+    padding: Metrics.smallMargin,
+    marginVertical: Metrics.smallMargin,
+    marginHorizontal: Metrics.marginHorizontal,
+    fontSize: Fonts.size.regular,
+    fontWeight: 'bold'
   },
-  loginRow: {
-    paddingBottom: Metrics.doubleBaseMargin,
-    paddingHorizontal: Metrics.doubleBaseMargin,
-    flexDirection: 'row'
-  },
-  loginButtonWrapper: {
-    flex: 1
-  },
-  loginButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: Colors.charcoal,
-    backgroundColor: Colors.panther,
-    padding: 6
-  },
-  loginText: {
+  mainText: {
+    color: Colors.themeDark,
+    padding: Metrics.smallMargin,
+    marginVertical: Metrics.smallMargin,
+    marginHorizontal: Metrics.largeMargin,
+    fontSize: Fonts.size.medium,
     textAlign: 'center',
-    color: Colors.silver
+    letterSpacing: 1
   },
-  topLogo: {
-    alignSelf: 'center',
-    resizeMode: 'contain'
-  }
+  subText: {
+    color: Colors.themeDark,
+    padding: Metrics.smallMargin,
+    marginVertical: Metrics.smallMargin,
+    marginHorizontal: Metrics.largeMargin,
+    fontSize: Fonts.size.small,
+    textAlign: 'center',
+    letterSpacing: 1
+  },
+  buttonContainer: {
+    backgroundColor: Colors.transparent,
+    // flex: 1,
+    // justifyContent: 'center',
+    // paddingBottom: Metrics.doubleBaseMargin,
+    // paddingLeft: 20,
+    // paddingRight: 20
+  },
 })

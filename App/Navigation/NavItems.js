@@ -15,21 +15,9 @@ const openDrawer = () => {
 export default {
   backButton () {
     return (
-      <TouchableOpacity onPress={NavigationActions.pop}>
-        <Icon name='angle-left'
-          size={Metrics.icons.large}
-          color={Colors.snow}
-          style={styles.backButton}
-        />
-      </TouchableOpacity>
-    )
-  },
-
-  hamburgerButton () {
-    return (
-      <TouchableOpacity onPress={openDrawer}>
-        <Icon name='bars'
-          size={Metrics.icons.medium}
+      <TouchableOpacity style={styles.buttonContainer} onPress={NavigationActions.pop}>
+        <Icon name='md-arrow-round-back'
+          size={Metrics.icons.small}
           color={Colors.snow}
           style={styles.navButtonLeft}
         />
@@ -37,16 +25,27 @@ export default {
     )
   },
 
-  searchButton (callback) {
+  hamburgerButton () {
     return (
-      <TouchableOpacity onPress={callback}>
-        <Icon name='search'
+      <TouchableOpacity style={styles.buttonContainer} onPress={openDrawer}>
+        <Icon name='md-menu'
           size={Metrics.icons.small}
           color={Colors.snow}
-          style={styles.searchButton}
+          style={styles.navButtonLeft}
         />
       </TouchableOpacity>
     )
-  }
+  },
 
+  shareButton (onPress: () => void) {
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <Icon name='md-share'
+          size={Metrics.icons.small}
+          color={Colors.snow}
+          style={styles.navButtonRight}
+        />
+      </TouchableOpacity>
+    )
+  },
 }

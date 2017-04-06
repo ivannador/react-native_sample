@@ -1,20 +1,55 @@
+import { Platform } from 'react-native'
 import PushNotification from 'react-native-push-notification'
+import API from '../Services/PushApi'
+import { Actions as NavigationActions } from 'react-native-router-flux'
+import Store from 'react-native-simple-store'
 
-// https://github.com/zo0r/react-native-push-notification
+let api = API.create()
+
 PushNotification.configure({
 
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: (token) => {
-    if (__DEV__) console.log('TOKEN:', token)
+    console.log('TOKEN:', token)
+    api.subscribePush(token.token, token.os).then((result) => console.log('SUBSCRIBE PUSH RESULT: ', result))
   },
 
   // (required) Called when a remote or local notification is opened or received
   onNotification: (notification) => {
-    if (__DEV__) console.log('NOTIFICATION:', notification)
+    console.log('NOTIFICATION:', notification)
+    if (Platform.OS === 'ios') {
+      if (notification.data.remote) {
+        PushNotification.localNotification({
+          message: notification.message,
+          playSound: true,
+          soundName: 'default'
+        })
+      } else {
+        if (notification.userInteraction) {
+          Store
+            .get('userId')
+            .then(userId => {
+              if (userId) {
+                NavigationActions.poll()
+              }
+            })
+        }
+      }
+    } else {
+      if (notification.userInteraction) {
+        Store
+          .get('userId')
+          .then(userId => {
+            if (userId) {
+              NavigationActions.poll()
+            }
+          })
+      }
+    }
   },
 
   // ANDROID ONLY: (optional) GCM Sender ID.
-  senderID: 'YOUR GCM SENDER ID',
+  senderID: 'INSERT_VALUE_HERE',
 
   // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
@@ -34,5 +69,5 @@ PushNotification.configure({
     * - if not, you must call PushNotificationsHandler.requestPermissions() later
     * This example app shows how to best call requestPermissions() later.
     */
-  requestPermissions: false
+  requestPermissions: true
 })
